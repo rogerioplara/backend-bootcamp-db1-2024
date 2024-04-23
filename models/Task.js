@@ -1,9 +1,9 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../database/sequelize');
-const User = require('./User');
+const { DataTypes } = require("sequelize");
+const sequelize = require("../database/sequelize");
+const User = require("./User");
 
 const Task = sequelize.define(
-  'tasks',
+  "tasks",
   {
     id: {
       type: DataTypes.BIGINT({ unsigned: true }),
@@ -28,18 +28,18 @@ const Task = sequelize.define(
     // Docs: https://sequelize.org/docs/v6/core-concepts/model-basics
 
     // renomeia as colunas timestamps padrões do sequelize
-    createdAt: 'created_at',
-    updatedAt: 'updated_at',
+    createdAt: "created_at",
+    updatedAt: "updated_at",
 
     // cria index de busca para otimizar as consultas por título da tarefa
     // exemplo: select * from tasks where title like '%abcd%'
     indexes: [
       {
-        type: 'FULLTEXT',
-        fields: ['title'],
+        type: "FULLTEXT",
+        fields: ["title"],
       },
     ],
-  },
+  }
 );
 
 /**
@@ -51,7 +51,11 @@ const Task = sequelize.define(
  * Docs: https://sequelize.org/docs/v6/core-concepts/assocs/
  */
 Task.belongsTo(User, {
-  // TODO: implementar aqui
+  onDelete: "NO ACTION",
+  onUpdate: "NO ACTION",
+  foreignKey: {
+    allowNull: false, // define que a chave estrangeira não pode ser nula
+  },
 });
 
 module.exports = Task;
