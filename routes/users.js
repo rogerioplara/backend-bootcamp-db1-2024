@@ -6,6 +6,8 @@ const sequelize = require("../database/sequelize");
 const { validationResultCheck } = require("../validators");
 const { validateCreateUser, validateLogin } = require("../validators/users");
 const User = require("../models/User");
+const { comparePassword } = require("../utils/password");
+const { generateUserToken } = require("../utils/token");
 
 const router = express.Router();
 
@@ -61,7 +63,29 @@ router.post("/login", validateLogin, async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // TODO: implementar aqui
+    // encontra esse usuário
+    const user = await User.findOne({
+      where: {
+        email,
+      },
+      attributes: {
+        include: ["password"], // sobrescreve e puxa o hash da senha
+      },
+    });
+
+    // comparacao da senha com o hash e teste da senha
+    if (!user || !comparePassword(password, user.get("password"))) {
+      res.status(401).send("Email ou senha inválidos");
+      return;
+    }
+
+    // geração do jwt
+    const userPayload = user.toJSON(); // devolve um objeto puro javascript para gerar o jwt, de outra forma não funciona pois o orm não é obj puro
+    delete userPayload.password;
+
+    const token = generateUserToken(userPayload);
+
+    res.status(200).json({ token });
   } catch (error) {
     console.warn(error);
     res.status(500).send();
