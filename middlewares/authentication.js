@@ -1,4 +1,5 @@
-const { validateUserToken } = require('../utils/token');
+const User = require("../models/User");
+const { validateUserToken } = require("../utils/token");
 
 /**
  * Recebe o valor do cabeçalho Authorization e quebra em partes para obter o token.
@@ -12,7 +13,7 @@ const { validateUserToken } = require('../utils/token');
 const getAuthenticationToken = (authorization) => {
   if (!authorization) return null;
 
-  const partes = authorization.split(' ');
+  const partes = authorization.split(" ");
   return partes[1];
 };
 
@@ -28,19 +29,22 @@ const middlewareAuthentication = async (request, response, next) => {
   const token = getAuthenticationToken(request.headers.authorization);
 
   if (!token) {
-    response.status(401).send('Token não informado.');
+    response.status(401).send("Token não informado.");
     return;
   }
 
   try {
     const payload = validateUserToken(token);
 
-    // TODO: implementar aqui
+    // pega o id que é passado no payload de geração do jwt
+    const user = await User.findByPk(payload.id);
+
+    request.loggedUser = user.toJSON();
 
     next();
   } catch (error) {
     console.warn(error);
-    response.status(401).send('Token inválido.');
+    response.status(401).send("Token inválido.");
   }
 };
 
