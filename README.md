@@ -190,3 +190,11 @@ senha padrão: captain42 - ALTERAR SEMPRE
 ---
 
 Após essas configurações, devem ser feitas as configurações do banco de dados, variáveis de ambiente e repositório
+
+Acesso do CapRover:
+https://captain.rogerio.douglasjunior.xyz/
+
+Aplicação:
+https://backend.rogerio.douglasjunior.xyz/
+
+Webhook configurado no github, a cada novo pull já será entregue em produção
