@@ -6,10 +6,10 @@
  * Module dependencies.
  */
 
-const path = require("path");
-const dotenv = require("dotenv").config;
+const path = require('path');
+const dotenv = require('dotenv').config;
 
-const isProduction = process.env.NODE_ENV === "production";
+const isProduction = process.env.NODE_ENV === 'production';
 
 if (!isProduction) {
   /**
@@ -18,15 +18,15 @@ if (!isProduction) {
    * localmente em modo de desenvolvimento.
    */
   dotenv({
-    path: path.resolve(__dirname, "../dev.env"),
+    path: path.resolve(__dirname, '../dev.env'),
   });
 }
 
-const debug = require("debug")("backend-bootcamp-db1-2024:server");
-const http = require("http");
+const debug = require('debug')('backend-bootcamp-db1-2024:server');
+const http = require('http');
 
-const app = require("../app");
-const sequelize = require("../database/sequelize");
+const app = require('../app');
+const sequelize = require('../database/sequelize');
 
 /**
  * Normalize a port into a number, string, or false.
@@ -50,8 +50,8 @@ function normalizePort(val) {
 /**
  * Get port from environment and store in Express.
  */
-const port = normalizePort(process.env.PORT || "3000");
-app.set("port", port);
+const port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
 
 /**
  * Create HTTP server.
@@ -62,19 +62,19 @@ const server = http.createServer(app);
  * Event listener for HTTP server "error" event.
  */
 function onError(error) {
-  if (error.syscall !== "listen") {
+  if (error.syscall !== 'listen') {
     throw error;
   }
 
-  const bind = typeof port === "string" ? `Pipe ${port}` : `Port ${port}`;
+  const bind = typeof port === 'string' ? `Pipe ${port}` : `Port ${port}`;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
-    case "EACCES":
+    case 'EACCES':
       console.error(`${bind} requires elevated privileges`);
       process.exit(1);
       break;
-    case "EADDRINUSE":
+    case 'EADDRINUSE':
       console.error(`${bind} is already in use`);
       process.exit(1);
       break;
@@ -88,13 +88,13 @@ function onError(error) {
  */
 function onListening() {
   const addr = server.address();
-  const bind = typeof addr === "string" ? `pipe ${addr}` : `port ${addr.port}`;
+  const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
   debug(`Listening on ${bind}`);
 
   sequelize
     .authenticate()
     .then(() => {
-      console.warn("Conectado com sucesso ao banco e dados!");
+      console.warn('Conectado com sucesso ao banco e dados!');
       // Após conectar na base de dados, chama o "sync" para criar as tabelas
       // caso ainda não existam.
       // Em um projeto real, este tipo de coisa deve ser feito via migração de banco de dados
@@ -103,7 +103,7 @@ function onListening() {
       return sequelize.sync({ alter: true });
     })
     .catch((error) => {
-      console.warn("Erro ao conectar ao banco e dados:", error);
+      console.warn('Erro ao conectar ao banco e dados:', error);
     });
 }
 
@@ -111,5 +111,5 @@ function onListening() {
  * Listen on provided port, on all network interfaces.
  */
 server.listen(port);
-server.on("error", onError);
-server.on("listening", onListening);
+server.on('error', onError);
+server.on('listening', onListening);

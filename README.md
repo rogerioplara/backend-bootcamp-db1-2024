@@ -198,3 +198,16 @@ Aplicação:
 https://backend.rogerio.douglasjunior.xyz/
 
 Webhook configurado no github, a cada novo pull já será entregue em produção
+
+## TESTES
+
+### JEST, MOCHA, TEST RUNNER
+
+Algumas das ferramentas mais utilizadas para realizar testes no nodejs
+
+Instalação do Jest:
+
+npm install --save-dev jest -> instala em desenvolvimento
+npm install --save-dev @jest/globals -> adiciona ao globals
+
+RUN npm test -- --ci -> adicionar ao dockerfile, antes do CMD para que a aplicação não seja enviada se os testes não passarem

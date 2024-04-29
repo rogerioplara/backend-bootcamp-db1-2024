@@ -1,13 +1,13 @@
-const express = require("express");
+const express = require('express');
 
-const { middlewareAuthentication } = require("../middlewares/authentication");
-const { validationResultCheck } = require("../validators");
+const { middlewareAuthentication } = require('../middlewares/authentication');
+const { validationResultCheck } = require('../validators');
 const {
   validateCreateTask,
   validateUpdateTask,
-} = require("../validators/tasks");
-const Task = require("../models/Task");
-const { Op } = require("sequelize");
+} = require('../validators/tasks');
+const Task = require('../models/Task');
+const { Op } = require('sequelize');
 
 const router = express.Router();
 
@@ -15,7 +15,7 @@ const router = express.Router();
  * Cadastro de tarefas para o usuário logado
  */
 router.post(
-  "/",
+  '/',
   middlewareAuthentication,
   validateCreateTask,
   async (req, res) => {
@@ -45,7 +45,7 @@ router.post(
 /**
  * Consulta de tarefas do usuário logado
  */
-router.get("/", middlewareAuthentication, async (req, res) => {
+router.get('/', middlewareAuthentication, async (req, res) => {
   try {
     const { loggedUser, query } = req;
 
@@ -72,7 +72,7 @@ router.get("/", middlewareAuthentication, async (req, res) => {
 /**
  * Retorna tarefa por ID do usuário logado
  */
-router.get("/:taskId", middlewareAuthentication, async (req, res) => {
+router.get('/:taskId', middlewareAuthentication, async (req, res) => {
   try {
     const { loggedUser, params } = req;
 
@@ -86,7 +86,7 @@ router.get("/:taskId", middlewareAuthentication, async (req, res) => {
     });
 
     if (!task) {
-      res.status(400).send("Tarefa não encontrada");
+      res.status(400).send('Tarefa não encontrada');
       return;
     }
 
@@ -134,7 +134,7 @@ const updateTaskConcluded = async (userId, taskId, concluded) => {
 /**
  * Marca a tarefa do usuário como concluída
  */
-router.put("/:taskId/concluded", middlewareAuthentication, async (req, res) => {
+router.put('/:taskId/concluded', middlewareAuthentication, async (req, res) => {
   try {
     const { loggedUser, params } = req;
 
@@ -143,7 +143,7 @@ router.put("/:taskId/concluded", middlewareAuthentication, async (req, res) => {
     const task = await updateTaskConcluded(loggedUser.id, taskId, true);
 
     if (!task) {
-      res.status(404).send("Tarefa não encontrada");
+      res.status(404).send('Tarefa não encontrada');
       return;
     }
 
@@ -157,7 +157,7 @@ router.put("/:taskId/concluded", middlewareAuthentication, async (req, res) => {
 /**
  * Marca a tarefa do usuário como pendente
  */
-router.put("/:taskId/pending", middlewareAuthentication, async (req, res) => {
+router.put('/:taskId/pending', middlewareAuthentication, async (req, res) => {
   try {
     const { loggedUser, params } = req;
 
@@ -166,7 +166,7 @@ router.put("/:taskId/pending", middlewareAuthentication, async (req, res) => {
     const task = await updateTaskConcluded(loggedUser.id, taskId, false);
 
     if (!task) {
-      res.status(404).send("Tarefa não encontrada");
+      res.status(404).send('Tarefa não encontrada');
       return;
     }
 
@@ -181,7 +181,7 @@ router.put("/:taskId/pending", middlewareAuthentication, async (req, res) => {
  * Atualiza os dados da tarefa do usuário de forma parcial
  */
 router.patch(
-  "/:taskId",
+  '/:taskId',
   middlewareAuthentication,
   validateUpdateTask,
   async (req, res) => {
@@ -205,7 +205,7 @@ router.patch(
 
       // testa se a task existe
       if (!task) {
-        res.status(404).send("Tarefa não encontrada");
+        res.status(404).send('Tarefa não encontrada');
         return;
       }
 
