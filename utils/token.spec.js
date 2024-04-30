@@ -22,7 +22,7 @@ describe('token', () => {
   });
 
   it('should verify if jwt.sign was called when the token is generated', () => {
-    // cria um spy
+    // cria um spy - padrão de projeto proxy
     const spyJwtSign = jest.spyOn(jwt, 'sign');
 
     // cria o user e o token

@@ -1,13 +1,13 @@
-const express = require("express");
-const { ValidationError, Sequelize } = require("sequelize");
+const express = require('express');
+const { ValidationError, Sequelize } = require('sequelize');
 
-const sequelize = require("../database/sequelize");
+const sequelize = require('../database/sequelize');
 
-const { validationResultCheck } = require("../validators");
-const { validateCreateUser, validateLogin } = require("../validators/users");
-const User = require("../models/User");
-const { comparePassword } = require("../utils/password");
-const { generateUserToken } = require("../utils/token");
+const { validationResultCheck } = require('../validators');
+const { validateCreateUser, validateLogin } = require('../validators/users');
+const User = require('../models/User');
+const { comparePassword } = require('../utils/password');
+const { generateUserToken } = require('../utils/token');
 
 const router = express.Router();
 
@@ -18,15 +18,15 @@ function isUniqueEmailError(error) {
 
   return error.errors.find(
     (databaseError) =>
-      databaseError.type === "unique violation" &&
-      databaseError.path === "users_email_unique"
+      databaseError.type === 'unique violation' &&
+      databaseError.path.includes('email')
   );
 }
 
 /**
  * Cadastro de usuários
  */
-router.post("/", validateCreateUser, async (req, res) => {
+router.post('/', validateCreateUser, async (req, res) => {
   if (validationResultCheck(req, res)) {
     return;
   }
@@ -45,7 +45,7 @@ router.post("/", validateCreateUser, async (req, res) => {
   } catch (error) {
     console.warn(error);
     if (isUniqueEmailError(error)) {
-      res.status(412).send("E-mail já cadastrado!");
+      res.status(412).send('E-mail já cadastrado!');
       return;
     }
     res.status(500).send();
@@ -55,7 +55,7 @@ router.post("/", validateCreateUser, async (req, res) => {
 /**
  * Login de usuários
  */
-router.post("/login", validateLogin, async (req, res) => {
+router.post('/login', validateLogin, async (req, res) => {
   if (validationResultCheck(req, res)) {
     return;
   }
@@ -69,13 +69,13 @@ router.post("/login", validateLogin, async (req, res) => {
         email,
       },
       attributes: {
-        include: ["password"], // sobrescreve e puxa o hash da senha
+        include: ['password'], // sobrescreve e puxa o hash da senha
       },
     });
 
     // comparacao da senha com o hash e teste da senha
-    if (!user || !comparePassword(password, user.get("password"))) {
-      res.status(401).send("Email ou senha inválidos");
+    if (!user || !comparePassword(password, user.get('password'))) {
+      res.status(401).send('Email ou senha inválidos');
       return;
     }
 

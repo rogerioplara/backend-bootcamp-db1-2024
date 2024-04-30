@@ -7,3 +7,6 @@ dotenv({
 });
 
 process.env.NODE_ENV = 'test'; // forca o env para test
+
+// Desabilita os warnings do sequelize durante a execução dos testes
+require('sequelize/lib/utils/logger').logger.warn = () => {};
